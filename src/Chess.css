@@ -1,0 +1,18 @@
+.board{
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    background-color: black;
+    width: 600px;
+    height: 600px;
+    margin: 0;
+}
+
+
+.square.light {
+    background-color: rgb(254, 235, 210);
+}
+
+.square.dark {
+    background-color: rgb(90, 45, 0);
+}
