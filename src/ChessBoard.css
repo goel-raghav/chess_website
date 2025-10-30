@@ -3,16 +3,17 @@
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
     background-color: black;
-    width: 600px;
-    height: 600px;
+    width: 800px;
+    height: 800px;
     margin: 0;
 }
 
 
 .square.light {
-    background-color: rgb(254, 235, 210);
+    background-color: #EBECD0;
 }
 
 .square.dark {
-    background-color: rgb(90, 45, 0);
+    background-color: #739552;
 }
+
