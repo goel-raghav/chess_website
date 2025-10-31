@@ -1,0 +1,6 @@
+
+export default function Piece(props:any){
+    return (
+        <div className="bg-[url(/public/black_bishop.png)] bg-cover bg-no-repeat w-full h-full"></div>
+    )
+}
