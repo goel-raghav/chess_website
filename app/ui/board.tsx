@@ -9,6 +9,7 @@ import { useState } from "react";
 export default function Board() {
 
   const [board, setBoard] = useState(new Chess())
+  const [currMoves, setCurrMoves] = useState<any[]>([])
 
   let squares = []
   const alpha = ["a", "b", "c", "d", "e", "f", "g", "h"]
@@ -16,17 +17,27 @@ export default function Board() {
   let boardObj = board.board()
   for (let row = 0; row < 8; row ++){
     for (let col = 0; col < 8; col++){
+
       const square = alpha[col] + ((8 - row))
+      let isMoveable = false;
+
+      for (const move of currMoves){
+        if (move.to === square){
+          isMoveable = true
+          break
+        }
+      }
+
       let piece = undefined
       const pieceInfo = boardObj[row][col]
+
       if (pieceInfo !== null) {
         const pieceType = pieceInfo["color"] + pieceInfo["type"]
         piece = <Piece square = {square} piece = {pieceType}></Piece>
       }
 
-
       squares.push(
-        <Square key = {square} id = {square} isDark={(row + col) % 2 === 1}>
+        <Square key = {square} id = {square} isDark= {(row + col) % 2 === 1} isMoveable = {isMoveable}>
           {piece}
         </Square>
       )
@@ -34,13 +45,27 @@ export default function Board() {
   }
   
   return (
-      <DndContext id={"board"} onDragEnd={handleDragEnd}>
+      <DndContext id={"board"} onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
         <div className="grid grid-cols-8 grid-rows-8 overflow-hidden w-[800px] h-[800px]">
           {squares}
         </div>
       </DndContext>
 
   );
+
+  function handleDragStart(e: any){
+    const pieceSquare = e.active.id.slice(0, 2)
+    const moves = board.moves({square: pieceSquare, verbose: true})
+    const moveSquares = []
+
+    for (const move of moves){
+      moveSquares.push(move)
+    }
+
+    setCurrMoves(moveSquares)
+
+    console.log("hei")
+  }
 
   function handleDragEnd(e: any){
 
@@ -51,14 +76,11 @@ export default function Board() {
 
     const moves = board.moves({square: pieceSquare, verbose: true})
 
-    console.log(moves)
-    console.log(pieceSquare)
-    console.log(squareOver)
-
     for (const move of moves){
       if (move.to === squareOver){
         board.move({from: pieceSquare, to: squareOver})
         setBoard(new Chess(board.fen()))
+        setCurrMoves([])
       }
     }
   }
